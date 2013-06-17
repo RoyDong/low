@@ -11,12 +11,16 @@ class Bootstrap extends Yaf\Bootstrap_Abstract
 {
 	public function _init(Yaf\Dispatcher $dispatcher)
     {
+        $session = Yaf\Session::getInstance();
         $config = Yaf\Application::app()->getConfig();
         $dispatcher->getRouter()->addConfig($config->routes);
-        $dispatcher->autoRender(false);
 		Yaf\Registry::set('config', $config);
 
-        //$this->awakeFromCookie($dispatcher->getRequest());
+        if(!$session->get('uid'))
+        {
+            $user = $this->getUserFromCookie($dispatcher->getRequest());
+            if($user) $session->set('uid', $user->id);
+        }
     }
 
 	public function _initPlugin(Yaf\Dispatcher $dispatcher)
@@ -25,25 +29,24 @@ class Bootstrap extends Yaf\Bootstrap_Abstract
 //		$dispatcher->registerPlugin($objSamplePlugin);
 	}
 
-    private function awakeFromCookie($request)
+    private function getUserFromCookie($request)
     {
-        $session = Yaf\Session::getInstance();
-        if($session->get('uid')) return;
-
         $remember = Yaf\Registry::get('config')->get('security.remember_me');
         $duration = $remember->duration * 24 * 3600;
         $key = $request->getCookie($remember->key);
         $keys = explode('_', $key);
 
-        if(count($keys) == 3)
+        if(count($keys) === 3)
         {
-            $user = (new UserModel)->findOneBy(['id' => $keys[2]]);
+            $user = \model\Base::getInstance('User')->find($keys[2]);
 
             if($key === $user->getAuthorizedKey($keys[1])
                     && $keys[1] + $duration > time())
             {
-                $session->set('uid', $user->id);
+                return $user;
             }
         }
+
+        return null;
     }
 }

@@ -35,27 +35,19 @@ abstract class Struct
         $this->weapon = null;
     }
 
-    abstract public function fire($target);
-
-    public function setHp($hp)
+    public function fire(Struct $target) 
     {
-        if($hp < 0)
+        if($this->weapon)
         {
-            $this->hp = 0;
-            $this->destroy();
-            return;
+            $increase = 1 + $this->level / 200;
+            $damage = $this->weapon->getDamage()*$increase;
+            $target->shield($damage, $this->weapon->getType());
         }
-
-        $limit = $this->getHpLimit();
-        $this->hp = $hp > $limit ? $limit : $hp;
+        else
+            throw new \core\Exception(1, 'no weapon');
     }
 
-    public function getType()
-    {
-        return $this->type;
-    }
-
-    public function damaged($damage, $type)
+    public function shield($damage, $type)
     {
         $percent = $this->getDamageReduce($type);
         $decrease = 1 - $this->level / 200;
@@ -63,11 +55,30 @@ abstract class Struct
         $this->setHp($this->hp - $damage);
     }
 
-    protected function getDamageReduce($attackType)
+    public function setHp($hp)
     {
-        $attackDefense = $attackType * 10 + $this->type;
+        if($hp < 0)
+        {
+            $this->hp = 0;
+            $this->destroy();
+        }
+        else
+        {
+            $limit = $this->getHpLimit();
+            $this->hp = $hp > $limit ? $limit : $hp;
+        }
+    }
 
-        switch($attackDefense)
+    public function getType()
+    {
+        return $this->type;
+    }
+
+    protected function getDamageReduce($damageType)
+    {
+        $damageSheild = $damageType * 10 + $this->type;
+
+        switch($damageSheild)
         {
             case 11: return 0.75;
                

@@ -6,7 +6,7 @@ use core\Struct;
 
 class Miner extends Struct
 {
-    protected $productyvity;
+    protected $productivity;
 
     protected $speed = 10;
 

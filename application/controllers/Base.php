@@ -7,10 +7,10 @@ class BaseController extends Yaf\Controller_Abstract
 
     public function __get($name)
     {
-        echo $name;
+        return \model\Base::getInstance('\\model\\'.$name);
     }
 
-    public function renderJson($data = null, $message = 'success', $code = 0)
+    public function renderJson($data = null, $message = 'done', $code = 0)
     {
         $json = json_encode(
                 ['message' => $message, 'code' => $code, 'data' => $data], 

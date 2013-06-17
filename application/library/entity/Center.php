@@ -14,7 +14,7 @@ class Center extends Struct
         $this->type = Struct::TYPE_FORT;
         $this->setHp($hp);
         $this->base = $base;
-        $this->mountWeapon($weapon);
+        $this->weapon = $weapon;
     }
 
     public function explore(\core\Location $location)
@@ -22,14 +22,7 @@ class Center extends Struct
 
     }
 
-    public function fire(Struct $target) 
-    {
-        $increase = 1 + $this->level / 200;
-        $damage = $this->weapon->getDamage()* $increase;
-        $target->damaged($damage, $this->weapon->getType());
-    }
-
-    public function destroy() 
+    public function destroy()
     {
         ;
     }

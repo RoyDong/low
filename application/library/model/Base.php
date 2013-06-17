@@ -21,10 +21,10 @@ class Base
 
     public static function getInstance($name)
     {
-         if(empty(BaseModel::$models[$name]))
-             BaseModel::$models[$name] = new $name;
+        if(empty(Base::$models[$name]))
+             Base::$models[$name] = new $name;
 
-         return BaseModel::$models[$name];
+        return Base::$models[$name];
     }
 
     protected function cache($key, $entity)
@@ -45,8 +45,8 @@ class Base
 	{
 		if(empty($this->pdo))
 		{
-            $db = Yaf\Registry::get('config')->db;
-			$this->pdo = new PDO($db->get('dsn'), $db->get('user'), $db->get('passwd'));
+            $db = \Yaf\Registry::get('config')->db;
+			$this->pdo = new \PDO($db->get('dsn'), $db->get('user'), $db->get('passwd'));
 		}
 
 		return $this->pdo;
@@ -105,7 +105,7 @@ class Base
         foreach($criteria as $key => $value) $sql .= " and `$key`='$value'";
         $sql .= ' limit 0,1';
 
-        return $this->pdo()->query($sql)->fetch(PDO::FETCH_ASSOC);
+        return $this->pdo()->query($sql)->fetch(\PDO::FETCH_ASSOC);
     }
 
     public function fetchAll($criteria, $order = null, $limit = 0, $offset = 0)
@@ -125,13 +125,13 @@ class Base
 
         $result = $this->pdo()->query($sql);
 
-        return $result ? $result->fetchAll(PDO::FETCH_ASSOC) : [];
+        return $result ? $result->fetchAll(\PDO::FETCH_ASSOC) : [];
     }
 
 	public function count($where = '1=1')
 	{
         $sql = 'select count(*) c from `'.$this->table.'` where '.$where;
 
-		return $this->pdo()->query($sql)->fetch( PDO::FETCH_ASSOC )['c'];
+		return $this->pdo()->query($sql)->fetch(\PDO::FETCH_ASSOC)['c'];
 	}
 }

@@ -6,8 +6,9 @@ use core\Struct;
 
 class Oilwell extends Struct
 {
+    protected $speed = 10;
 
-    protected $productyvity;
+    protected $productivity;
 
     public function __construct($base, $level, $hp)
     {

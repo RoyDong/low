@@ -15,7 +15,7 @@ class User extends Base
 
         if($row)
         {
-            $entity = (new UserEntity)->initContent($row);
+            $entity = (new \entity\User)->initContent($row);
             $this->cache($entity->id, $entity);
 
             return $entity;
@@ -38,7 +38,7 @@ class User extends Base
         $rows = $this->fetchAll($criteria, $order, $limit, $offset);
     }
 
-    public function save(UserEntity $entity)
+    public function save(\entity\User $entity)
     {
         $data = [
             'name' => $entity->name,
@@ -53,10 +53,5 @@ class User extends Base
             $entity->id = $this->insert($data);
 
         $this->cache($entity->id, $entity);
-    }
-
-    public function newEntity()
-    {
-        return new UserEntity;
     }
 }
