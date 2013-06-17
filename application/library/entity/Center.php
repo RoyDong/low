@@ -2,16 +2,16 @@
 
 namespace entity;
 
-use core\Armor;
+use core\Struct;
 
-class Center extends Armor
+class Center extends Struct
 {
     protected $speed = 10;
 
     public function __construct($level, $hp, $base, $weapon)
     {
         $this->level = $level;
-        $this->type = Armor::TYPE_FORT;
+        $this->type = Struct::TYPE_FORT;
         $this->setHp($hp);
         $this->base = $base;
         $this->mountWeapon($weapon);
@@ -22,7 +22,7 @@ class Center extends Armor
 
     }
 
-    public function fire(Armor $target) 
+    public function fire(Struct $target) 
     {
         $increase = 1 + $this->level / 200;
         $damage = $this->weapon->getDamage()* $increase;

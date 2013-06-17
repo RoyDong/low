@@ -2,9 +2,9 @@
 
 namespace entity;
 
-use core\Armor;
+use core\Struct;
 
-class Miner extends Armor
+class Miner extends Struct
 {
     protected $productyvity;
 

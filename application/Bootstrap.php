@@ -16,7 +16,7 @@ class Bootstrap extends Yaf\Bootstrap_Abstract
         $dispatcher->autoRender(false);
 		Yaf\Registry::set('config', $config);
 
-        //$this->awakeFromAuthorizedKey($dispatcher->getRequest());
+        //$this->awakeFromCookie($dispatcher->getRequest());
     }
 
 	public function _initPlugin(Yaf\Dispatcher $dispatcher)
@@ -25,7 +25,7 @@ class Bootstrap extends Yaf\Bootstrap_Abstract
 //		$dispatcher->registerPlugin($objSamplePlugin);
 	}
 
-    private function awakeFromAuthorizedKey($request)
+    private function awakeFromCookie($request)
     {
         $session = Yaf\Session::getInstance();
         if($session->get('uid')) return;

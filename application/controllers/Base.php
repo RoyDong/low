@@ -3,11 +3,11 @@
 
 class BaseController extends Yaf\Controller_Abstract 
 {
-    public function get($name)
-    {
-        $class = $name.'Model';
+    protected $yafAutoRender = false;
 
-        return new $class;
+    public function __get($name)
+    {
+        echo $name;
     }
 
     public function renderJson($data = null, $message = 'success', $code = 0)

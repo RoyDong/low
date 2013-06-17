@@ -1,7 +1,7 @@
 <?php
 namespace core;
 
-abstract class Armor
+abstract class Struct
 {
     const TYPE_NONE = 0;
 

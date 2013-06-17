@@ -16,7 +16,7 @@ abstract class Weapon
 
     protected $owner;
 
-    public function setOwner(Armor $owner)
+    public function setOwner(Struct $owner)
     {
         $this->owner = $owner;
     }

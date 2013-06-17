@@ -2,9 +2,9 @@
 
 namespace entity;
 
-use core\Armor;
+use core\Struct;
 
-class Oilwell extends Armor
+class Oilwell extends Struct
 {
 
     protected $productyvity;

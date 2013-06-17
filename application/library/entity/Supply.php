@@ -2,9 +2,9 @@
 
 namespace entity;
 
-use core\Armor;
+use core\Struct;
 
-class Supply extends Armor
+class Supply extends Struct
 {
 
     public function __construct($base, $level, $hp)
