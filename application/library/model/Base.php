@@ -2,6 +2,7 @@
 
 namespace model;
 
+
 class Base
 {
 	/**
@@ -17,40 +18,26 @@ class Base
 
     protected $cache = [];
 
-    protected static $models = [];
-
-    public static function getInstance($name)
-    {
-        if(empty(Base::$models[$name]))
-             Base::$models[$name] = new $name;
-
-        return Base::$models[$name];
-    }
-
-    protected function cache($key, $entity)
-    {
-        $this->cache[$key] = $entity;
-    }
-
-    public function __construct($table)
-    {
-        $this->table = $table;
-    }
-
     /**
 	 * get mysql connection
 	 * @return mysql db connection
 	 */
 	protected function pdo()
 	{
-		if(empty($this->pdo))
+		if(!$this->pdo)
 		{
             $db = \Yaf\Registry::get('config')->db;
-			$this->pdo = new \PDO($db->get('dsn'), $db->get('user'), $db->get('passwd'));
+			$this->pdo = new \PDO($db->get('dsn'), 
+                    $db->get('user'), $db->get('passwd'));
 		}
 
 		return $this->pdo;
 	}
+
+    protected function cache($key, $entity)
+    {
+        $this->cache[$key] = $entity;
+    }
 
     protected function fromCache($key)
     {
@@ -72,7 +59,11 @@ class Base
 			$values[] = $value;
 		}
 
-        $this->pdo()->exec( 'insert into `' . $this->table . '` (`' . implode( '`,`' , $columns ) . '`) values ("' . implode( '","' , $values ) . '")' );
+        $sql = 'insert into `'.$this->table
+                .'` (`'.implode('`,`', $columns).'`) values ("'
+                . implode('","', $values ).'")';
+
+        $this->pdo()->exec($sql);
 
         return $this->pdo->lastInsertId();
 	}
@@ -82,21 +73,22 @@ class Base
 	 * @param array $data
 	 * @param string $where
 	 */
-	public function update( $data , $where )
+	public function update($data, $where)
 	{
-		$tmp = '';
+        $sql = 'update `'.$this->table.'` set ';
 
-		foreach( $data as $column => $value )
-		{
-			$tmp .= '`' . $column . '`="' . $value . '",';
-		}
+		foreach($data as $column => $value)
+			$sql .= '`'.$column.'`="'.$value.'",';
 
-		return $this->pdo()->exec( 'update `' . $this->table . '` set ' . substr( $tmp , 0 , -1 ) . ' where ' . $where);
+        $sql[strlen($sql) - 1] = ' ';
+
+		return $this->pdo()->exec($sql.$where);
 	}
 
 	protected function delete( $where , $limit = '0,1' )
 	{
-		return $this->pdo()->exec( 'delete * from `' . $this->table . '` where ' . $where . ' ' . $limit );
+		return $this->pdo()->exec(
+                'delete * from `'.$this->table.'` where '.$where.' '.$limit );
 	}
 
     public function fetch($criteria)

@@ -7,6 +7,7 @@
  * 这些方法, 都接受一个参数:Yaf_Dispatcher $dispatcher
  * 调用的次序, 和申明的次序相同
  */
+
 class Bootstrap extends Yaf\Bootstrap_Abstract
 {
 	public function _init(Yaf\Dispatcher $dispatcher)
@@ -15,6 +16,7 @@ class Bootstrap extends Yaf\Bootstrap_Abstract
         $config = Yaf\Application::app()->getConfig();
         $dispatcher->getRouter()->addConfig($config->routes);
 		Yaf\Registry::set('config', $config);
+        Yaf\Registry::set('model', new model\ObjectPool);
 
         if(!$session->get('uid'))
         {
@@ -23,11 +25,11 @@ class Bootstrap extends Yaf\Bootstrap_Abstract
         }
     }
 
-	public function _initPlugin(Yaf\Dispatcher $dispatcher)
-    {
+//	public function _initPlugin(Yaf\Dispatcher $dispatcher)
+//    {
 //		$objSamplePlugin = new SamplePlugin();
 //		$dispatcher->registerPlugin($objSamplePlugin);
-	}
+//	}
 
     private function getUserFromCookie($request)
     {
@@ -38,13 +40,10 @@ class Bootstrap extends Yaf\Bootstrap_Abstract
 
         if(count($keys) === 3)
         {
-            $user = \model\Base::getInstance('User')->find($keys[2]);
+            $user = Yaf\Registry::get('model')->get('User')->find($keys[2]);
 
             if($key === $user->getAuthorizedKey($keys[1])
-                    && $keys[1] + $duration > time())
-            {
-                return $user;
-            }
+                    && $keys[1] + $duration > time()) return $user;
         }
 
         return null;

@@ -7,7 +7,15 @@ class BaseController extends Yaf\Controller_Abstract
 
     public function __get($name)
     {
-        return \model\Base::getInstance('\\model\\'.$name);
+        return Yaf\Registry::get('model')->get($name);
+    }
+
+    public function getUser()
+    {
+        $uid = Yaf\Session::getInstance()->get('uid');
+        if($uid) return $this->User->find($uid);
+
+        return null;
     }
 
     public function renderJson($data = null, $message = 'done', $code = 0)
@@ -16,8 +24,7 @@ class BaseController extends Yaf\Controller_Abstract
                 ['message' => $message, 'code' => $code, 'data' => $data], 
                 JSON_UNESCAPED_UNICODE);
 
-        $response = $this->getResponse();
         header('Content-Type: application/json');
-        $response->setBody($json);
+        $this->getResponse()->setBody($json);
     }
 }

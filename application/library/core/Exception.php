@@ -2,7 +2,7 @@
 
 namespace core;
 
-class Exception extends Yaf\Exception
+class Exception extends \Yaf\Exception
 {
     const SERVER_ERROR = 1;
 

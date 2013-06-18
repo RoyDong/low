@@ -6,9 +6,16 @@ class UserController extends BaseController
 {
 	public function showAction($uid = 0)
     {
-        $user = $this->User->find($uid);
+        $user = $uid ? $this->User->find($uid) : $this->getUser();
 
-        $this->renderJson($user);
+        if(!$user) 
+            throw new Exception(Exception::USER_NOT_FOUND, 'User not found');
+
+        $this->renderJson([
+            'id' => $user->getId(),
+            'name' => $user->getName(),
+            'email' => $user->getEmail()
+        ]);
 	}
 
 	public function signinAction()
@@ -25,7 +32,7 @@ class UserController extends BaseController
 
         $user = $this->User->findOneBy(['email' => $email]);
 
-        if(!$user->id) 
+        if(!$user)
             throw new Exception(Exception::USER_NOT_FOUND);
 
         if(!$user->checkPasswd($passwd))
@@ -51,13 +58,14 @@ class UserController extends BaseController
         $user = $userModel->findOneBy(['email' => $email]);
         if($user) throw new Exception(Exception::EMAIL_IS_USED);
 
-        $user = new \entity\User;
+        $user = new entity\User;
         $user->email = $email;
         $user->name = $email;
         $user->passwd = $passwd;
         $userModel->save($user);
         if(!$user->id) throw new Exception(Exception::SERVER_ERROR);
 
+        $this->initCity($user);
         $this->saveSession($user);
         $this->renderJson([
             'id' => $user->id,
@@ -74,7 +82,7 @@ class UserController extends BaseController
         $this->renderJson();
     }
 
-    private function saveSession($user, $rememberMe = true)
+    protected function saveSession($user, $rememberMe = true)
     {
         Yaf\Session::getInstance()->set('uid', $user->id);
 
@@ -86,5 +94,14 @@ class UserController extends BaseController
             setcookie($remember->key, $user->getAuthorizedKey($time), 
                     $expire, '/');
         }
+    }
+
+    protected function initCity($user)
+    {
+        $location = $this->Map->createBirthLocation();
+        $city = (new entity\City)->setLocation($location)
+                ->setUser($user)
+                ->setCreateTime(time())
+                ->setName($user->name);
     }
 }
