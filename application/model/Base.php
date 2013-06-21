@@ -95,7 +95,7 @@ class Base
     {
         $sql = 'select * from `'.$this->table.'` where 1=1';
         foreach($criteria as $key => $value) $sql .= " and `$key`='$value'";
-        $sql .= ' limit 0,1';
+        $sql .= ' limit 0,2';
 
         return $this->pdo()->query($sql)->fetch(\PDO::FETCH_ASSOC);
     }
@@ -115,9 +115,7 @@ class Base
 
         if($limit) $sql .= ' limit '.$offset.', '.$limit;
 
-        $result = $this->pdo()->query($sql);
-
-        return $result ? $result->fetchAll(\PDO::FETCH_ASSOC) : [];
+        return $this->pdo()->query($sql)->fetchAll(\PDO::FETCH_ASSOC);
     }
 
 	public function count($where = '1=1')

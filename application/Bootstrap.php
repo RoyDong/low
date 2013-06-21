@@ -16,6 +16,7 @@ class Bootstrap extends Yaf\Bootstrap_Abstract
         $config = Yaf\Application::app()->getConfig();
         $dispatcher->getRouter()->addConfig($config->routes);
 		Yaf\Registry::set('db', $config->db);
+        Yaf\Registry::set('security', $config->security);
         Yaf\Registry::set('model', new model\ObjectPool);
 
         if(!$session->get('uid'))
@@ -33,7 +34,7 @@ class Bootstrap extends Yaf\Bootstrap_Abstract
 
     private function getUserFromCookie($request)
     {
-        $remember = Yaf\Registry::get('config')->get('security.remember_me');
+        $remember = Yaf\Registry::get('security')->get('remember_me');
         $duration = $remember->duration * 24 * 3600;
         $key = $request->getCookie($remember->key);
         $keys = explode('_', $key);

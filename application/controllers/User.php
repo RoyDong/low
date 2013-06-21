@@ -8,6 +8,8 @@ class UserController extends BaseController
     {
         $user = $uid ? $this->User->find($uid) : $this->getUser();
 
+        $this->User->fetchAll(['id' => 0]);
+
         if(!$user) 
             throw new Exception(Exception::USER_NOT_FOUND, 'User not found');
 
