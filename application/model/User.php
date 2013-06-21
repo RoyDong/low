@@ -26,7 +26,7 @@ class User extends Base
 
     public function find($id)
     {
-        $entity = $this->fromCache($id);
+        $entity = $this->getEntity($id);
 
         if($entity) return $entity;
 
@@ -52,6 +52,6 @@ class User extends Base
         else
             $entity->id = $this->insert($data);
 
-        $this->cache($entity->id, $entity);
+        $this->setEntity($entity->id, $entity);
     }
 }

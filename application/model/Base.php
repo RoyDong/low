@@ -16,7 +16,7 @@ class Base
 	 */
 	protected $table;
 
-    protected $cache = [];
+    protected $entities = [];
 
     /**
 	 * get mysql connection
@@ -26,7 +26,7 @@ class Base
 	{
 		if(!$this->pdo)
 		{
-            $db = \Yaf\Registry::get('config')->db;
+            $db = \Yaf\Registry::get('db');
 			$this->pdo = new \PDO($db->get('dsn'), 
                     $db->get('user'), $db->get('passwd'));
 		}
@@ -34,14 +34,14 @@ class Base
 		return $this->pdo;
 	}
 
-    protected function cache($key, $entity)
+    protected function setEntity($key, $entity)
     {
-        $this->cache[$key] = $entity;
+        $this->entities[$key] = $entity;
     }
 
-    protected function fromCache($key)
+    protected function getEntity($key)
     {
-        return isset($this->cache[$key]) ? $this->cache[$key] : null;
+        return isset($this->entities[$key]) ? $this->entities[$key] : null;
     }
 
     /**
@@ -49,7 +49,7 @@ class Base
 	 * @param array $data
 	 * @return int 
 	 */
-	public function insert( $data )
+	public function insert($data)
 	{
 		$columns = $values = array();
 

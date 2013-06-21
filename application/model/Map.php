@@ -6,7 +6,7 @@ class Map extends Base
 {
     public function __construct() 
     {
-        $this->table = 'map';
+        $this->table = 'location';
     }
 
     public function createBirthLocation()
@@ -16,7 +16,6 @@ class Map extends Base
         $location->y = 1;
         $location->mine = 2000;
         $location->oil = 1000;
-        $location->rebornTime = 0;
 
         return $location;
     }

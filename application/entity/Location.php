@@ -14,7 +14,7 @@ class Location
 
     public $city;
 
-    public $rebornTime;
+    public $abandonAt;
 
     public function distance(Location $target)
     {

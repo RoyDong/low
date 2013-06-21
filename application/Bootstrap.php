@@ -15,7 +15,7 @@ class Bootstrap extends Yaf\Bootstrap_Abstract
         $session = Yaf\Session::getInstance();
         $config = Yaf\Application::app()->getConfig();
         $dispatcher->getRouter()->addConfig($config->routes);
-		Yaf\Registry::set('config', $config);
+		Yaf\Registry::set('db', $config->db);
         Yaf\Registry::set('model', new model\ObjectPool);
 
         if(!$session->get('uid'))
