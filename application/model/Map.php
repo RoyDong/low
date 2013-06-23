@@ -35,20 +35,20 @@ class Map extends Base
 
     public function getLastRefreshArea()
     {
-        $sql = 'select last_refresh_area_index la from map';
-        $index = $this->pdo()->query($sql)->fetch(\PDO::FETCH_ASSOC)['la'];
-        if($index < 0 || $index >= 99) $index = 0;
-
-        $originX = (int)($index / 10);
-        $originY = $index % 10;
+        $sql = 'select last_refresh_x x, last_refresh_y y from map';
+        $start = $this->pdo()->query($sql)->fetch(\PDO::FETCH_ASSOC);
+        $endX = $start['x'] + Map::REFRESH_X;
+        $endY = $start['y'] + Map::REFRESH_Y;
+        if($endX > Map::MAX_X) $endX = Map::MAX_X;
+        if($endY > Map::MAX_Y) $endY = Map::MAX_Y;
 
         $resources = $this->findResourceByRange(
-                $originX, $originX + Map::REFRESH_X,
-                $originY, $originY + Map::REFRESH_Y);
+                $start['x'], $endX, $start['y'], $endY);
 
-        for($x = $originX; $x < Map::REFRESH_X; $x++)
+
+        for($x = $start['x']; $x < $endX; $x++)
         {
-            for($y = $originY; $y < Map::REFRESH_Y; $y++)
+            for($y = $start['y']; $y < $endY; $y++)
             {
 
             }
@@ -57,11 +57,9 @@ class Map extends Base
 
     public function findResourceByRange($minX, $maxX, $minY, $maxY)
     {
-        $sql = <<<SQL
-SELECT * FROM location 
-    WHERE x >= $minX AND x < $maxX AND y >= $minY AND y < $maxY
-SQL;
+        $sql = 'SELECT * FROM location WHERE '
+                ."x >= $minX AND x < $maxX AND y >= $minY AND y < $maxY";
 
-        $result = $this->pdo()->query($sql)->fetchAll(\PDO::FETCH_ASSOC);
+        return $this->pdo()->query($sql)->fetchAll(\PDO::FETCH_ASSOC);
     }
 }
