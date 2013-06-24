@@ -7,6 +7,6 @@ class MapController extends BaseController
 
     public function refreshAction()
     {
-
+        $this->Map->refreshResources();
     }
 }

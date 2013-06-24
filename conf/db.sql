@@ -15,9 +15,17 @@ DROP TABLE IF EXISTS `location`;
 CREATE TABLE `location` (
   `x` int(11) NOT NULL,
   `y` int(11) NOT NULL,
+  `type` smallint(2) NOT NULL DEFAULT 1,
   `mine` int(11) NOT NULL DEFAULT 0,
   `oil` int(11) NOT NULL DEFAULT 0,
   `city_id` int(11) NOT NULL DEFAULT 0,
-  `abandon_at` int(11) NOT NULL DEFAULT 0,
+  `refresh_at` int(11) NOT NULL DEFAULT 0,
   PRIMARY KEY (`x`,`y`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+DROP TABLE IF EXISTS `map`;
+
+CREATE TABLE `map` (
+  `last_refresh_x` int(11),
+  `last_refresh_y` int(11)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;

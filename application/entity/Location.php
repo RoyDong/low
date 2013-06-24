@@ -14,10 +14,13 @@ class Location
 
     public $city;
 
+    public $type;
+
     public $abandonAt;
 
-    public function distance(Location $target)
+    public function distance(Location $location)
     {
-        return sqrt(pow($target->x - $this->x, 2) + pow($target->y - $this->y, 2));
+        return sqrt(pow($location->x - $this->x, 2) + 
+            pow($location->y - $this->y, 2));
     }
 }

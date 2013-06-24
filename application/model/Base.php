@@ -29,6 +29,7 @@ class Base
             $db = \Yaf\Registry::get('db');
 			$this->pdo = new \PDO($db->get('dsn'), 
                     $db->get('user'), $db->get('passwd'));
+            //$this->pdo->setAttribute(\PDO::ATTR_EMULATE_PREPARES, 0);
 		}
 
 		return $this->pdo;
@@ -75,6 +76,11 @@ class Base
 	 */
 	public function update($data, $where)
 	{
+		return $this->pdo()->exec($this->getUpdateSql($data, $where));
+	}
+
+    protected function getUpdateSql($data, $where)
+    {
         $sql = 'update `'.$this->table.'` set ';
 
 		foreach($data as $column => $value)
@@ -82,8 +88,8 @@ class Base
 
         $sql[strlen($sql) - 1] = ' ';
 
-		return $this->pdo()->exec($sql.$where);
-	}
+        return $sql.' where '.$where;
+    }
 
 	protected function delete( $where , $limit = '0,1' )
 	{
