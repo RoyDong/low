@@ -26,6 +26,7 @@ class Exception extends \Yaf\Exception
 
     const PASSWORD_ERROR = 19;
 
+    const WRONG_LOCATION = 20;
 
     public function __construct($code, $message = null, $previous = null) 
     {

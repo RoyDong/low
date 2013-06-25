@@ -70,4 +70,17 @@ class City
 
         return $this;
     }
+
+    public function getData()
+    {
+        return [
+            'x' => $this->x,
+            'y' => $this->y,
+            'mine' => $this->mine,
+            'oil' => $this->oil,
+            'type' => $this->type,
+            'cid' => $this->cid,
+            'refresh_at' => $this->refreshAt
+        ];
+    }
 }

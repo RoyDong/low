@@ -27,35 +27,34 @@ class Map extends Base
         $this->table = 'location';
     }
 
-    public function createBirthLocation($x, $y, $city)
+    public function find($x, $y)
     {
-        $location = $this->fetch(['x' => $x, 'y' => $y]);
-        if($location['city_id']) 
-            throw new \core\Exception(1, 'Location is used');
+        $key = $x.','.$y;
+        $location = $this->getEntity($key);
 
-        $location['mine'] = 5000;
-        $location['oil'] = 5000;
-        $location['city_id'] = $city->id;
-        $location['refresh_at'] = time();
-        $this->update($location,
-            "`x`={$location['x']} AND `y`={$location['y']}");
+        if(!$location)
+        {
+            $data = $this->fetch(['x' => $x, 'y' => $y]);
+            $location = (new \entity\Location)->initContent($data);
+            $this->setEntity($key, $location);
+        }
 
         return $location;
     }
 
     public function save(Location $location)
     {
-        $data = [
-            'x' => $location->x,
-            'y' => $location->y,
-            'mine' => $location->mine,
-            'oil' => $location->oil,
-            'type' => $location->type,
-            'city_id' => $location->cid,
-            'refresh_at' => $location->refreshAt
-        ];
+        $data = $location->getData();
 
-        $this->update($data, "`x`={$data['x']} AND `y`={$data['y']}");
+        return $this->update($data, "`x`={$data['x']} AND `y`={$data['y']}");
+    }
+
+    public function updateNocityLocation(Location $location)
+    {
+        $data = $location->getData();
+
+        return $this->update($data, 
+                "`x`={$data['x']} AND `y`={$data['y']} AND `cid`=0");
     }
 
     public function refreshResources()
