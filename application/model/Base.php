@@ -81,14 +81,14 @@ class Base
 
     protected function getUpdateSql($data, $where)
     {
-        $sql = 'update `'.$this->table.'` set ';
+        $sql = 'UPDATE `'.$this->table.'` SET ';
 
 		foreach($data as $column => $value)
 			$sql .= '`'.$column.'`="'.$value.'",';
 
         $sql[strlen($sql) - 1] = ' ';
 
-        return $sql.' where '.$where;
+        return $sql.'WHERE '.$where;
     }
 
 	protected function delete( $where , $limit = '0,1' )

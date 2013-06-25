@@ -10,7 +10,7 @@ class City
 
     protected $name;
 
-    protected $createTime;
+    protected $createdAt;
 
     public function getLocation()
     {
@@ -32,6 +32,7 @@ class City
     public function setUser(User $user)
     {
         $this->user = $user;
+        $this->uid = $user->id;
 
         return $this;
     }
@@ -48,14 +49,24 @@ class City
         return $this;
     }
 
-    public function getCreateTime()
+    public function getCreatedAt()
     {
-        return $this->createTime;
+        return $this->createdAt;
     }
 
-    public function setCreateTime($time)
+    public function setCreatedAt($time)
     {
-        $this->createTime = $time;
+        $this->createdAt = $time;
+
+        return $this;
+    }
+
+    public function initContent($data)
+    {
+        $this->id = $data['id'];
+        $this->uid = $data['uid'];
+        $this->name = $data['name'];
+        $this->createdAt = $data['created_at'];
 
         return $this;
     }

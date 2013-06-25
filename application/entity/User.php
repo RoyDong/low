@@ -2,7 +2,7 @@
 
 namespace entity;
 
-class User
+class User extends Base
 {
     protected $id;
 
@@ -13,16 +13,6 @@ class User
     protected $passwd;
 
     protected $salt;
-
-    public function __get($name) 
-    {
-        return $this->{'get'.$name}();
-    }
-
-    public function __set($name, $value)
-    {
-        $this->{'set'.$name}($value);
-    }
 
     public function setId($id)
     {

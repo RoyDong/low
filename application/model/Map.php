@@ -27,7 +27,7 @@ class Map extends Base
         $this->table = 'location';
     }
 
-    public function createBirthLocation($x, $y, $cid)
+    public function createBirthLocation($x, $y, $city)
     {
         $location = $this->fetch(['x' => $x, 'y' => $y]);
         if($location['city_id']) 
@@ -35,12 +35,27 @@ class Map extends Base
 
         $location['mine'] = 5000;
         $location['oil'] = 5000;
-        $location['city_id'] = $cid;
+        $location['city_id'] = $city->id;
         $location['refresh_at'] = time();
-        $this->update($location, 
+        $this->update($location,
             "`x`={$location['x']} AND `y`={$location['y']}");
 
         return $location;
+    }
+
+    public function save(Location $location)
+    {
+        $data = [
+            'x' => $location->x,
+            'y' => $location->y,
+            'mine' => $location->mine,
+            'oil' => $location->oil,
+            'type' => $location->type,
+            'city_id' => $location->cid,
+            'refresh_at' => $location->refreshAt
+        ];
+
+        $this->update($data, "`x`={$data['x']} AND `y`={$data['y']}");
     }
 
     public function refreshResources()
@@ -54,15 +69,15 @@ class Map extends Base
         if($endY > Map::MAX_Y) $endY = Map::MAX_Y;
         $locations = $this->getNocityLocations(
                 $start['x'], $endX, $start['y'], $endY);
-        $range = 100;
+
         $possibility = 5;
         $time = time();
-        $sql = [];
+        $sqls = [];
         $missCount = 0;
 
         foreach($locations as $location)
         {
-            if(mt_rand(1, $range) > $possibility)
+            if(mt_rand(1, 100) > $possibility)
             {
                 $missCount++;
                 $possibility += (int)($missCount / 20);
@@ -84,10 +99,10 @@ class Map extends Base
             }
 
             $where = "`x`={$location['x']} AND `y`={$location['y']}";
-            $sql[] = $this->getUpdateSql($data, $where).';';
+            $sqls[] = $this->getUpdateSql($data, $where).';';
         }
 
-        $this->pdo()->exec(implode('', $sql));
+        $this->pdo()->exec(implode('', $sqls));
     }
 
     protected function getNocityLocations($minX, $maxX, $minY, $maxY)

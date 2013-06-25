@@ -18,7 +18,7 @@ CREATE TABLE `location` (
   `type` smallint(2) NOT NULL DEFAULT 1,
   `mine` int(11) NOT NULL DEFAULT 0,
   `oil` int(11) NOT NULL DEFAULT 0,
-  `city_id` int(11) NOT NULL DEFAULT 0,
+  `cid` int(11) NOT NULL DEFAULT 0,
   `refresh_at` int(11) NOT NULL DEFAULT 0,
   PRIMARY KEY (`x`,`y`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
@@ -29,3 +29,14 @@ CREATE TABLE `map` (
   `last_refresh_x` int(11),
   `last_refresh_y` int(11)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+DROP TABLE IF EXISTS `city`;
+
+CREATE TABLE `city` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(20) NOT NULL,
+  `uid` int(11) NOT NULL DEFAULT 0,
+  `created_at` int(11) NOT NULL DEFAULT 0,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
