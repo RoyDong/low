@@ -28,6 +28,8 @@ class Exception extends \Yaf\Exception
 
     const WRONG_LOCATION = 20;
 
+    const NOT_NEW_PLAYER = 21;
+
     public function __construct($code, $message = null, $previous = null) 
     {
         parent::__construct($message, $code, $previous);

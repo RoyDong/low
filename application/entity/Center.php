@@ -6,9 +6,13 @@ use core\Struct;
 
 class Center extends Struct
 {
+    protected $id;
+
+    protected $cid;
+
     protected $speed = 10;
 
-    public function __construct($level, $hp, $base, $weapon)
+    public function __construct($level, $hp, $city, $weapon)
     {
         $this->level = $level;
         $this->type = Struct::TYPE_FORT;

@@ -52,6 +52,13 @@ class Base
 	 */
 	public function insert($data)
 	{
+        $this->pdo()->exec($this->getInsertSql($data));
+
+        return $this->pdo->lastInsertId();
+	}
+
+    protected function getInsertSql($data)
+    {
 		$columns = $values = array();
 
 		foreach( $data as $column => $value )
@@ -60,14 +67,10 @@ class Base
 			$values[] = $value;
 		}
 
-        $sql = 'insert into `'.$this->table
+        return 'insert into `'.$this->table
                 .'` (`'.implode('`,`', $columns).'`) values ("'
                 . implode('","', $values ).'")';
-
-        $this->pdo()->exec($sql);
-
-        return $this->pdo->lastInsertId();
-	}
+    }
 
 	/**
 	 * update data 

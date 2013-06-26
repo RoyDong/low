@@ -19,11 +19,11 @@ abstract class Struct
 
     protected $weapon;
 
-    protected $base;
+    protected $city;
 
-    protected $initialHp;
+    protected $initHp;
 
-    protected $increateHp;
+    protected $hpIncreament;
 
     public function mountWeapon(Weapon $weapon)
     {
@@ -103,9 +103,9 @@ abstract class Struct
         }
     }
 
-    public function getHpLimit() 
+    public function getHpLimit()
     {
-        return $this->initialHp + $this->increateHp * $this->level;
+        return $this->initHp + $this->hpIncreament * $this->level;
     }
 
     abstract public function destroy();

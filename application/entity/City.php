@@ -2,15 +2,29 @@
 
 namespace entity;
 
-class City
+class City extends Base
 {
+    protected $id;
+
     protected $location;
 
     protected $user;
 
-    protected $name;
+    protected $name = '';
 
-    protected $createdAt;
+    protected $createdAt = 0;
+
+    public function setId($id)
+    {
+        $this->id = $id;
+
+        return $this;
+    }
+
+    public function getId()
+    {
+        return $this->id;
+    }
 
     public function getLocation()
     {
@@ -74,13 +88,10 @@ class City
     public function getData()
     {
         return [
-            'x' => $this->x,
-            'y' => $this->y,
-            'mine' => $this->mine,
-            'oil' => $this->oil,
-            'type' => $this->type,
-            'cid' => $this->cid,
-            'refresh_at' => $this->refreshAt
+            'id' => $this->id,
+            'uid' => $this->uid,
+            'name' => $this->name,
+            'created_at' => $this->createdAt
         ];
     }
 }

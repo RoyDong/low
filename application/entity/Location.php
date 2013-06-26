@@ -93,9 +93,16 @@ class Location extends Base
         return $this;
     }
 
-    public function getCityId()
+    public function getCid()
     {
         return $this->cid;
+    }
+
+    public function setCid($cid)
+    {
+        $this->cid = $cid;
+
+        return $this;
     }
 
     public function distance(Location $location)

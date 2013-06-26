@@ -16,7 +16,7 @@ class User extends Base
         if($row)
         {
             $entity = (new \entity\User)->initContent($row);
-            $this->cache($entity->id, $entity);
+            $this->setEntity($entity->id, $entity);
 
             return $entity;
         }
@@ -33,25 +33,20 @@ class User extends Base
         return $this->findOneBy(['id' => $id]);
     }
 
-    protected function findBy($criteria, $order = null, $limit = 0, $offset = 0)
-    {
-        $rows = $this->fetchAll($criteria, $order, $limit, $offset);
-    }
-
-    public function save(\entity\User $entity)
+    public function save(\user\User $user)
     {
         $data = [
-            'name' => $entity->name,
-            'email' => $entity->email,
-            'passwd' => $entity->passwd,
-            'salt' => $entity->salt
+            'name' => $user->name,
+            'email' => $user->email,
+            'passwd' => $user->passwd,
+            'salt' => $user->salt
         ];
 
-        if($entity->id)
-            $this->update($data, '`id`='.$entity->id);
+        if($user->id)
+            $this->update($data, '`id`='.$user->id);
         else
-            $entity->id = $this->insert($data);
+            $user->id = $this->insert($data);
 
-        $this->setEntity($entity->id, $entity);
+        $this->setEntity($user->id, $user);
     }
 }

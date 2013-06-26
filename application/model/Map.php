@@ -57,6 +57,20 @@ class Map extends Base
                 "`x`={$data['x']} AND `y`={$data['y']} AND `cid`=0");
     }
 
+    public function getSettleDownLocation($x, $y)
+    {
+        $sql = "select * from location where `x`=$x and `y`=$y"
+                .' and mine=0 and oil=0 and cid=0 and `type`='.Map::TYPE_LAND
+                .' limit 0,1';
+
+        $data = $this->pdo()->query($sql)->fetch(\PDO::FETCH_ASSOC);
+
+        if($data)
+            return (new Location)->initContent($data);
+
+        return null;
+    }
+
     public function refreshResources()
     {
         $sql = 'select last_refresh_x x, last_refresh_y y from map';
