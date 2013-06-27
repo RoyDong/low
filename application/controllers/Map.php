@@ -12,8 +12,8 @@ class MapController extends BaseController
     public function settleDownAction()
     {
         $request = $this->getRequest();
-        $x = $request->getPost('x');
-        $y = $request->getPost('y');
+        $x = $request->get('x');
+        $y = $request->get('y');
         $user = $this->getUser();
         $mapModel = $this->Map;
         $cityModel = $this->City;

@@ -19,15 +19,33 @@ class City extends Base
         $data = $city->getData();
 
         if($city->id)
-            $this->update ($data, '`id`='.$city->id);
+            $this->update($data, '`id`='.$city->id);
         else
             $city->id = $this->insert($data);
 
         $this->setEntity($city->id, $city);
     }
 
-    public function loadCity()
+    public function findOneBy($criteria)
     {
+        $row = $this->fetch($criteria);
 
+        if($row)
+        {
+            $entity = (new \entity\User)->initContent($row);
+            $this->setEntity($entity->id, $entity);
+
+            return $entity;
+        }
+
+        return null;
+    }
+
+    public function load($id, \entity\User $user)
+    {
+        $sql = 'select c.name,s* from city c left join structure s s.cid = c.id'
+                ."where c.id = $id and c.uid = {$user->id}";
+
+        $result = $this->pdo()->query($sql)->fetchAll(\PDO::FETCH_ASSOC);
     }
 }

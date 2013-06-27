@@ -1,7 +1,7 @@
 <?php
-namespace core;
+namespace entity;
 
-abstract class Struct
+abstract class Structure
 {
     const TYPE_NONE = 0;
 
@@ -24,16 +24,6 @@ abstract class Struct
     protected $initHp;
 
     protected $hpIncreament;
-
-    public function mountWeapon(Weapon $weapon)
-    {
-        $this->weapon = $weapon;
-    }
-
-    public function unmountWeapon()
-    {
-        $this->weapon = null;
-    }
 
     public function fire(Struct $target) 
     {

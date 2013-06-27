@@ -23,8 +23,8 @@ class UserController extends BaseController
 	public function signinAction()
     {
         $request = $this->getRequest();
-        $email = $request->getPost('email');
-        $passwd = $request->getPost('passwd');
+        $email = $request->get('email');
+        $passwd = $request->get('passwd');
 
         if(strlen($passwd) < 6) 
             throw new Exception(Exception::PASSWORD_TOO_SHORT);
@@ -47,8 +47,8 @@ class UserController extends BaseController
     public function signupAction()
     {
         $request = $this->getRequest();
-        $email = $request->getPost('email');
-        $passwd = $request->getPost('passwd');
+        $email = $request->get('email');
+        $passwd = $request->get('passwd');
 
         if(strlen($passwd) < 6) 
             throw new Exception(Exception::PASSWORD_TOO_SHORT);
@@ -67,7 +67,6 @@ class UserController extends BaseController
         $userModel->save($user);
         if(!$user->id) throw new Exception(Exception::SERVER_ERROR);
 
-        $this->initCity($user);
         $this->saveSession($user);
         $this->renderJson([
             'id' => $user->id,
@@ -90,20 +89,11 @@ class UserController extends BaseController
 
         if($rememberMe)
         {
-            $remember = Yaf\Registry::get('config')->get('security.remember_me');
+            $remember = Yaf\Registry::get('security')->get('remember_me');
             $time = time();
             $expire = $time + $remember->duration * 24 * 3600;
             setcookie($remember->key, $user->getAuthorizedKey($time), 
                     $expire, '/');
         }
-    }
-
-    protected function initCity($user)
-    {
-        $location = $this->Map->createBirthLocation();
-        $city = (new entity\City)->setLocation($location)
-                ->setUser($user)
-                ->setCreateTime(time())
-                ->setName($user->name);
     }
 }

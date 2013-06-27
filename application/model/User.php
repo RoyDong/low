@@ -33,7 +33,7 @@ class User extends Base
         return $this->findOneBy(['id' => $id]);
     }
 
-    public function save(\user\User $user)
+    public function save(\entity\User $user)
     {
         $data = [
             'name' => $user->name,

@@ -2,9 +2,7 @@
 
 namespace entity;
 
-use core\Struct;
-
-class Center extends Struct
+class Center extends Structure
 {
     protected $id;
 
@@ -12,12 +10,12 @@ class Center extends Struct
 
     protected $speed = 10;
 
-    public function __construct($level, $hp, $city, $weapon)
+    public function __construct($level, $hp, $city)
     {
         $this->level = $level;
         $this->type = Struct::TYPE_FORT;
         $this->setHp($hp);
-        $this->base = $base;
+        $this->city = $city;
         $this->weapon = $weapon;
     }
 

@@ -10,7 +10,7 @@ class Exception extends \Yaf\Exception
 
     const METHOD_NOT_ALLOW = 11;
 
-    const USER_NO_PERMISSION = 12;
+    const NO_PERMISSION = 12;
 
     const USER_NOT_FOUND = 13;
 

@@ -15,7 +15,7 @@ DROP TABLE IF EXISTS `location`;
 CREATE TABLE `location` (
   `x` int(11) NOT NULL,
   `y` int(11) NOT NULL,
-  `type` smallint(2) NOT NULL DEFAULT 1,
+  `type` smallint(2) UNSIGNED NOT NULL DEFAULT 1,
   `mine` int(11) NOT NULL DEFAULT 0,
   `oil` int(11) NOT NULL DEFAULT 0,
   `cid` int(11) NOT NULL DEFAULT 0,
@@ -40,15 +40,24 @@ CREATE TABLE `city` (
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
+DROP TABLE IF EXISTS `structure`;
 
-DROP TABLE IF EXISTS `center`;
-
-CREATE TABLE `center` (
+CREATE TABLE `structure` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `cid` int(11) NOT NULL,
-  `wid` int(11) NOT NULL,
   `hp` int(11) NOT NULL DEFAULT 0,
+  `type` smallint(2) UNSIGNED NOT NULL,
   `level` int(11) NOT NULL DEFAULT 1,
   `created_at` int(11) NOT NULL DEFAULT 0,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+DROP TABLE IF EXISTS `army`;
+
+CREATE TABLE `army` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `cid` int(11) NOT NULL,
+  `type` smallint(2) UNSIGNED NOT NULL,
+  `count` int(11) NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
