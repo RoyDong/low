@@ -24,7 +24,12 @@ class Center extends Structure
 
     public function getName()
     {
-        return 'center';
+        return 'Command Center';
+    }
+
+    public function getConstructLine()
+    {
+
     }
 
     public function explore(\core\Location $location)

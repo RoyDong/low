@@ -30,6 +30,8 @@ class Exception extends \Yaf\Exception
 
     const NOT_NEW_PLAYER = 21;
 
+    const ERROR_STRUCTURE_TYPE = 22;
+
     public function __construct($code, $message = null, $previous = null) 
     {
         parent::__construct($message, $code, $previous);

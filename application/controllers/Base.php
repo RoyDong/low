@@ -7,7 +7,7 @@ class BaseController extends Yaf\Controller_Abstract
 
     public function __get($name)
     {
-        return Yaf\Registry::get('model')->get($name);
+        return \model\Base::getInstance($name);
     }
 
     public function getUser()

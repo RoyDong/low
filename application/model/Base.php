@@ -53,6 +53,19 @@ class Base
 		return Base::$pdo;
     }
 
+    protected static $models = [];
+
+    public static function getInstance($name)
+    {
+        if(empty(Base::$models[$name]))
+        {
+            $class = '\model\\'.$name;
+            Base::$models[$name] = new $class;
+        }
+
+        return Base::$models[$name];
+    }
+
     protected function setEntity($key, $entity)
     {
         $this->entities[$key] = $entity;
