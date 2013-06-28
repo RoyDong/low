@@ -7,6 +7,6 @@ class Center extends Base
 
     public function __construct() 
     {
-        $this->table = 'center';
+        $this->table = 'structure';
     }
 }

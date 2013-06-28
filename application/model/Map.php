@@ -49,12 +49,18 @@ class Map extends Base
         return $this->update($data, "`x`={$data['x']} AND `y`={$data['y']}");
     }
 
-    public function updateNocityLocation(Location $location)
+    public function updateNocityLocation(\entity\Location $location)
     {
-        $data = $location->getData();
+        $data = [
+            'cid' => $location->cid,
+            'mine' => $location->mine,
+            'oil' => $location->oil,
+            'refresh_at' => $location->refreshAt
+        ];
+        $where = "`x`={$location->x} AND `y`={$location->y}"
+                .' AND `cid`=0 AND `type`='.Map::TYPE_LAND;
 
-        return $this->update($data, 
-                "`x`={$data['x']} AND `y`={$data['y']} AND `cid`=0");
+        return $this->update($data, $where);
     }
 
     public function getSettleDownLocation($x, $y)
@@ -63,10 +69,10 @@ class Map extends Base
                 .' and mine=0 and oil=0 and cid=0 and `type`='.Map::TYPE_LAND
                 .' limit 0,1';
 
-        $data = $this->pdo()->query($sql)->fetch(\PDO::FETCH_ASSOC);
+        $data = Base::getPdo()->query($sql)->fetch(\PDO::FETCH_ASSOC);
 
         if($data)
-            return (new Location)->initContent($data);
+            return (new \entity\Location)->initContent($data);
 
         return null;
     }
@@ -74,7 +80,7 @@ class Map extends Base
     public function refreshResources()
     {
         $sql = 'select last_refresh_x x, last_refresh_y y from map';
-        $start = $this->pdo()->query($sql)->fetch(\PDO::FETCH_ASSOC);
+        $start = Base::getPdo()->query($sql)->fetch(\PDO::FETCH_ASSOC);
         if(!$start)$start = ['x' => 0, 'y' => 0];
         $endX = $start['x'] + Map::REFRESH_X;
         $endY = $start['y'] + Map::REFRESH_Y;
@@ -85,7 +91,6 @@ class Map extends Base
 
         $possibility = 5;
         $time = time();
-        $sqls = [];
         $missCount = 0;
 
         foreach($locations as $location)
@@ -112,18 +117,16 @@ class Map extends Base
             }
 
             $where = "`x`={$location['x']} AND `y`={$location['y']}";
-            $sqls[] = $this->getUpdateSql($data, $where).';';
+            $this->update($data, $where);
         }
-
-        $this->pdo()->exec(implode('', $sqls));
     }
 
     protected function getNocityLocations($minX, $maxX, $minY, $maxY)
     {
         $sql = 'SELECT * FROM location WHERE `type` = '.Map::TYPE_LAND
             ." AND x >= $minX AND x < $maxX AND y >= $minY AND y < $maxY"
-            .' AND city_id = 0';
+            .' AND cid = 0';
 
-        return $this->pdo()->query($sql)->fetchAll(\PDO::FETCH_ASSOC);
+        return Base::getPdo()->query($sql)->fetchAll(\PDO::FETCH_ASSOC);
     }
 }

@@ -3,15 +3,19 @@ namespace entity;
 
 abstract class Structure
 {
-    const TYPE_NONE = 0;
+    const ARMOR_NONE = 0;
 
-    const TYPE_LIGHT = 1;
+    const ARMOR_LIGHT = 1;
 
-    const TYPE_HEAVY = 2;
+    const ARMOR_HEAVY = 2;
 
-    const TYPE_FORT = 3;
+    const ARMOR_FORT = 3;
+
+    const TYPE_CENTER = 1;
 
     protected $level;
+
+    protected $armor;
 
     protected $type;
 
@@ -25,21 +29,20 @@ abstract class Structure
 
     protected $hpIncreament;
 
+    protected $createdAt;
+
     public function fire(Struct $target) 
     {
         if($this->weapon)
-        {
-            $increase = 1 + $this->level / 200;
-            $damage = $this->weapon->getDamage()*$increase;
-            $target->shield($damage, $this->weapon->getType());
-        }
+            $target->shield($this->weapon->getDamage(), 
+                    $this->weapon->getType());
         else
-            throw new \core\Exception(1, 'no weapon');
+            throw new \core\Exception(1, 'Unarmed structure');
     }
 
-    public function shield($damage, $type)
+    public function shield($damage, $armor)
     {
-        $percent = $this->getDamageReduce($type);
+        $percent = $this->getDamageReduce($armor);
         $decrease = 1 - $this->level / 200;
         $damage = $damage * $percent * $decrease;
         $this->setHp($this->hp - $damage);
@@ -59,6 +62,11 @@ abstract class Structure
         }
     }
 
+    public function getArmor()
+    {
+        return $this->armor;
+    }
+
     public function getType()
     {
         return $this->type;
@@ -66,7 +74,7 @@ abstract class Structure
 
     protected function getDamageReduce($damageType)
     {
-        $damageSheild = $damageType * 10 + $this->type;
+        $damageSheild = $damageType * 10 + $this->armor;
 
         switch($damageSheild)
         {
@@ -96,6 +104,13 @@ abstract class Structure
     public function getHpLimit()
     {
         return $this->initHp + $this->hpIncreament * $this->level;
+    }
+
+    public function setCreatedAt($time)
+    {
+        $this->createdAt = $time;
+
+        return $this;
     }
 
     abstract public function destroy();

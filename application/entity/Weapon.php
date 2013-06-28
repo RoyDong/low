@@ -1,8 +1,8 @@
 <?php
 
-namespace core;
+namespace entity;
 
-abstract class Weapon
+class Weapon
 {
     const TPYE_NORMAL = 1;
 
@@ -14,16 +14,10 @@ abstract class Weapon
 
     protected $damage;
 
-    protected $owner;
-
-    public function setOwner(Struct $owner)
-    {
-        $this->owner = $owner;
-    }
-
-    public function setDamage($damage)
+    public function __construct($damage, $type) 
     {
         $this->damage = $damage;
+        $this->type = $type;
     }
 
     public function getDamage()

@@ -12,6 +12,8 @@ class City extends Base
 
     protected $name = '';
 
+    protected $uid = 0;
+
     protected $createdAt = 0;
 
     public function setId($id)
@@ -88,7 +90,6 @@ class City extends Base
     public function getData()
     {
         return [
-            'id' => $this->id,
             'uid' => $this->uid,
             'name' => $this->name,
             'created_at' => $this->createdAt

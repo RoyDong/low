@@ -9,11 +9,12 @@ class MapController extends BaseController
         $this->Map->refreshResources();
     }
 
-    public function settleDownAction()
+    public function settledownAction()
     {
         $request = $this->getRequest();
         $x = $request->get('x');
         $y = $request->get('y');
+        $name = $request->get('name');
         $user = $this->getUser();
         $mapModel = $this->Map;
         $cityModel = $this->City;
@@ -22,17 +23,23 @@ class MapController extends BaseController
         if(!$location)
             throw new Exception(Exception::ERROR_LOCATION, 'Error location');
 
-        if($cityModel->countByUser($user->id))
-            throw new Exception (Exception::NOT_NEW_PLAYER, 'Not new player');
+        if($cityModel->count('`uid`='.$user->id))
+            throw new Exception(Exception::NOT_NEW_PLAYER, 'Not new player');
 
-        $city = (new entity\City)->setUser($user)->setCreatedAt(time());
+        $city = (new entity\City)->setUser($user)
+                ->setName($name)
+                ->setCreatedAt(time());
         $cityModel->save($city);
+
         $location->setCity($city)
                 ->setMine(5000)
                 ->setOil(5000)
                 ->setRefreshAt(time());
-
         $mapModel->updateNocityLocation($location);
+
+        $center = (new entity\Center(1, 0, $city))->setCreatedAt(time());
+        $center->setHp($center->getHpLimit());
+        $this->Center->insert($center->getData(), true);
 
         $this->renderJson();
     }

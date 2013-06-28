@@ -49,7 +49,7 @@ class Location extends Base
         return $this->mine;
     }
 
-    public function setMien($mine)
+    public function setMine($mine)
     {
         $this->mine = $mine;
 
@@ -101,6 +101,18 @@ class Location extends Base
     public function setCid($cid)
     {
         $this->cid = $cid;
+
+        return $this;
+    }
+
+    public function getRefreshAt()
+    {
+        return $this->refreshAt;
+    }
+
+    public function setRefreshAt($time)
+    {
+        $this->refreshAt = $time;
 
         return $this;
     }

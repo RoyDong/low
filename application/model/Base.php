@@ -8,7 +8,6 @@ class Base
 	/**
 	 * mysql database connection
 	 */
-	private $pdo;
 
 	/**
 	 * data table used as table table or cache key prefix
@@ -18,22 +17,41 @@ class Base
 
     protected $entities = [];
 
+	private static $pdo;
+
+    private static $sqlBuffer = [];
+
+    public static function persist($sql)
+    {
+        Base::$sqlBuffer[] = $sql;
+    }
+
+    public static function flush()
+    {
+        if(count(Base::$sqlBuffer))
+        {
+            echo '<pre>';
+            print_r(base::$sqlBuffer);
+            Base::getPdo()->exec(implode(';', Base::$sqlBuffer).';');
+            Base::$sqlBuffer = [];
+        }
+    }
+
     /**
-	 * get mysql connection
-	 * @return mysql db connection
-	 */
-	protected function pdo()
-	{
-		if(!$this->pdo)
+     * 
+     * @return \PDO
+     */
+    protected static function getPdo()
+    {
+		if(!Base::$pdo)
 		{
             $db = \Yaf\Registry::get('db');
-			$this->pdo = new \PDO($db->get('dsn'), 
+			Base::$pdo = new \PDO($db->get('dsn'), 
                     $db->get('user'), $db->get('passwd'));
-            //$this->pdo->setAttribute(\PDO::ATTR_EMULATE_PREPARES, 0);
 		}
 
-		return $this->pdo;
-	}
+		return Base::$pdo;
+    }
 
     protected function setEntity($key, $entity)
     {
@@ -50,18 +68,27 @@ class Base
 	 * @param array $data
 	 * @return int 
 	 */
-	public function insert($data)
+	public function insert($data, $buffer = false)
 	{
-        $this->pdo()->exec($this->getInsertSql($data));
+        $sql = $this->getInsertSql($data);
 
-        return $this->pdo->lastInsertId();
+        if($buffer)
+        {
+            Base::persist($sql);
+
+            return 0;
+        }
+
+        Base::getPdo()->exec($sql);
+
+        return Base::getPdo()->lastInsertId();
 	}
 
     protected function getInsertSql($data)
     {
 		$columns = $values = array();
 
-		foreach( $data as $column => $value )
+		foreach($data as $column => $value)
 		{
 			$columns[] = $column;
 			$values[] = $value;
@@ -79,7 +106,7 @@ class Base
 	 */
 	public function update($data, $where)
 	{
-		return $this->pdo()->exec($this->getUpdateSql($data, $where));
+		Base::persist($this->getUpdateSql($data, $where));
 	}
 
     protected function getUpdateSql($data, $where)
@@ -94,10 +121,10 @@ class Base
         return $sql.'WHERE '.$where;
     }
 
-	protected function delete( $where , $limit = '0,1' )
+	protected function delete($where , $limit = '0,1')
 	{
-		return $this->pdo()->exec(
-                'delete * from `'.$this->table.'` where '.$where.' '.$limit );
+        $sql = 'delete * from `'.$this->table.'` where '.$where.' '.$limit;
+        Base::persist($sql);
 	}
 
     public function fetch($criteria)
@@ -106,7 +133,7 @@ class Base
         foreach($criteria as $key => $value) $sql .= " and `$key`='$value'";
         $sql .= ' limit 0,2';
 
-        return $this->pdo()->query($sql)->fetch(\PDO::FETCH_ASSOC);
+        return Base::getPdo()->query($sql)->fetch(\PDO::FETCH_ASSOC);
     }
 
     public function fetchAll($criteria, $order = null, $limit = 0, $offset = 0)
@@ -124,13 +151,13 @@ class Base
 
         if($limit) $sql .= ' limit '.$offset.', '.$limit;
 
-        return $this->pdo()->query($sql)->fetchAll(\PDO::FETCH_ASSOC);
+        return Base::getPdo()->query($sql)->fetchAll(\PDO::FETCH_ASSOC);
     }
 
 	public function count($where = '1=1')
 	{
         $sql = 'select count(*) c from `'.$this->table.'` where '.$where;
 
-		return $this->pdo()->query($sql)->fetch(\PDO::FETCH_ASSOC)['c'];
+		return Base::getPdo()->query($sql)->fetch(\PDO::FETCH_ASSOC)['c'];
 	}
 }

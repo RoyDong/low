@@ -26,11 +26,10 @@ class Bootstrap extends Yaf\Bootstrap_Abstract
         }
     }
 
-//	public function _initPlugin(Yaf\Dispatcher $dispatcher)
-//  {
-//		$objSamplePlugin = new SamplePlugin();
-//		$dispatcher->registerPlugin($objSamplePlugin);
-//	}
+	public function _initPlugin(Yaf\Dispatcher $dispatcher)
+    {
+		$dispatcher->registerPlugin(new LowPlugin);
+	}
 
     private function getUserFromCookie($request)
     {

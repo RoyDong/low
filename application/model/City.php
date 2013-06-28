@@ -9,11 +9,6 @@ class City extends Base
         $this->table = 'city';
     }
 
-    public function countByUser($uid)
-    {
-        return $this->count('`uid`='.$uid);
-    }
-
     public function save(\entity\City $city)
     {
         $data = $city->getData();
@@ -46,6 +41,6 @@ class City extends Base
         $sql = 'select c.name,s* from city c left join structure s s.cid = c.id'
                 ."where c.id = $id and c.uid = {$user->id}";
 
-        $result = $this->pdo()->query($sql)->fetchAll(\PDO::FETCH_ASSOC);
+        $result = Base::getPdo()->query($sql)->fetchAll(\PDO::FETCH_ASSOC);
     }
 }

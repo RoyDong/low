@@ -13,8 +13,8 @@ class CityController extends BaseController
 	public function showAction($id)
     {
         $user = $this->getUser();
-        $city = $this->City->load($id, $user);
-        if(!$city) throw new Exception(Exception::NO_PERMISSION);
+        //$city = $this->City->load($id, $user);
+        //if(!$city) throw new Exception(Exception::NO_PERMISSION);
 
         $this->renderJson(['name' => $user->name]);
     }
