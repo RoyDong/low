@@ -27,11 +27,6 @@ class Center extends Structure
         return 'Command Center';
     }
 
-    public function getConstructLine()
-    {
-
-    }
-
     public function explore(\core\Location $location)
     {
 

@@ -38,7 +38,6 @@ class City extends Base
 
     public function load($id, \entity\User $user)
     {
-
         $sql = <<<SQL
 select c.name, c.created_at, l.x, l.y, l.mine, l.oil, l.type, l.refresh_at
 from city c inner join location l on l.cid = c.id
@@ -63,12 +62,9 @@ SQL;
                 ->setUser($user);
 
         $sql = 'select * from structure where cid = '.$id;
-        
         $result = Base::getPdo()->query($sql)->fetchAll(\PDO::FETCH_ASSOC);
+        foreach($result as $data) $city->loadStructure($data);
 
-        foreach($result as $data)
-        {
-            echo $data['id'];
-        }
+        return $city;
     }
 }

@@ -6,15 +6,43 @@ class City extends Base
 {
     protected $id;
 
-    protected $location;
-
-    protected $user;
-
     protected $name = '';
 
     protected $uid = 0;
 
     protected $createdAt = 0;
+
+    protected $user;
+
+    protected $location;
+
+    protected $center;
+
+    public function loadStructure($data)
+    {
+        switch ($data['type'])
+        {
+            case Structure::TYPE_CENTER :
+                $center = new Center($data['level'], $data['hp'], $this);
+                $this->setCenter($center);
+                return $center;
+
+            default : 
+                throw new \core\Exception(\core\Exception::ERROR_STRUCTURE_TYPE);
+        }
+    }
+
+    public function setCenter($center)
+    {
+        $this->center = $center;
+
+        return $this;
+    }
+
+    public function getCenter()
+    {
+        return $this->center;
+    }
 
     public function setId($id)
     {

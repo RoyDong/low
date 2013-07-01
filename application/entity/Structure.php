@@ -31,20 +31,6 @@ abstract class Structure
 
     protected $createdAt;
 
-    public static function createInstance($data)
-    {
-        switch ($data['type'])
-        {
-            case Structure::TYPE_CENTER :
-                $center = new Center($data['level'], $data['hp'], null);
-
-                return $center;
-
-            default : 
-                throw new \core\Exception(\core\Exception::ERROR_STRUCTURE_TYPE);
-        }
-    }
-
     public function fire(Struct $target) 
     {
         if($this->weapon)
