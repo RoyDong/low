@@ -39,7 +39,7 @@ class MapController extends BaseController
 
         $center = (new entity\Center(1, 0, $city))->setCreatedAt(time());
         $center->setHp($center->getHpLimit());
-        $this->Center->insert($center->getData(), true);
+        $this->Center->insert($center->getDbData(), true);
 
         $this->renderJson();
     }

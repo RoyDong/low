@@ -21,7 +21,7 @@ class Base
 
     private static $sqlBuffer = [];
 
-    public static function persist($sql)
+    public static function buffer($sql)
     {
         Base::$sqlBuffer[] = $sql;
     }
@@ -30,8 +30,6 @@ class Base
     {
         if(count(Base::$sqlBuffer))
         {
-            echo '<pre>';
-            print_r(base::$sqlBuffer);
             Base::getPdo()->exec(implode(';', Base::$sqlBuffer).';');
             Base::$sqlBuffer = [];
         }
@@ -87,7 +85,7 @@ class Base
 
         if($buffer)
         {
-            Base::persist($sql);
+            Base::buffer($sql);
 
             return 0;
         }
@@ -119,7 +117,7 @@ class Base
 	 */
 	public function update($data, $where)
 	{
-		Base::persist($this->getUpdateSql($data, $where));
+		Base::buffer($this->getUpdateSql($data, $where));
 	}
 
     protected function getUpdateSql($data, $where)
@@ -137,7 +135,7 @@ class Base
 	protected function delete($where , $limit = '0,1')
 	{
         $sql = 'delete * from `'.$this->table.'` where '.$where.' '.$limit;
-        Base::persist($sql);
+        Base::buffer($sql);
 	}
 
     public function fetch($criteria)

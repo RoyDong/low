@@ -16,6 +16,6 @@ class CityController extends BaseController
         $city = $this->City->load($id, $user);
         if(!$city) throw new Exception(Exception::NO_PERMISSION);
 
-        $this->renderJson(['name' => $user->name]);
+        $this->renderJson($city->getData());
     }
 }

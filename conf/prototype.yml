@@ -1,0 +1,26 @@
+## YAML Template.
+---
+
+TYPE_LAND: 1
+TYPE_SAE: 2
+
+user: 
+    id: int
+    name: string
+    email: string
+
+location:
+    x: int
+    y: int
+    type: [TYPE_LAND, TYPE_SEA]
+    mine: int
+    oil: int
+    city: [city, null]
+
+city:
+    id: int
+    name: string
+    level: int
+    location: location
+    user: user
+

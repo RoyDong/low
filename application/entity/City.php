@@ -2,6 +2,8 @@
 
 namespace entity;
 
+use core\Exception;
+
 class City extends Base
 {
     protected $id;
@@ -10,38 +12,14 @@ class City extends Base
 
     protected $uid = 0;
 
-    protected $createdAt = 0;
-
     protected $user;
 
     protected $location;
 
-    protected $center;
+    protected $ctime;
 
     public function loadStructure($data)
     {
-        switch ($data['type'])
-        {
-            case Structure::TYPE_CENTER :
-                $center = new Center($data['level'], $data['hp'], $this);
-                $this->setCenter($center);
-                return $center;
-
-            default : 
-                throw new \core\Exception(\core\Exception::ERROR_STRUCTURE_TYPE);
-        }
-    }
-
-    public function setCenter($center)
-    {
-        $this->center = $center;
-
-        return $this;
-    }
-
-    public function getCenter()
-    {
-        return $this->center;
     }
 
     public function setId($id)
@@ -76,7 +54,6 @@ class City extends Base
     public function setUser(User $user)
     {
         $this->user = $user;
-        $this->uid = $user->id;
 
         return $this;
     }
@@ -93,34 +70,49 @@ class City extends Base
         return $this;
     }
 
-    public function getCreatedAt()
+    public function getCtime()
     {
-        return $this->createdAt;
+        return $this->ctime;
     }
 
-    public function setCreatedAt($time)
+    public function setCtime($time)
     {
-        $this->createdAt = $time;
+        $this->ctime= $time;
 
         return $this;
     }
 
     public function initContent($data)
     {
-        $this->id = $data['id'];
-        $this->uid = $data['uid'];
+        $this->id = (int)$data['id'];
+        $this->uid = (int)$data['uid'];
         $this->name = $data['name'];
-        $this->createdAt = $data['created_at'];
+        $this->ctime = (int)$data['ctime'];
 
         return $this;
     }
 
-    public function getData()
+    public function getDbData()
     {
         return [
             'uid' => $this->uid,
             'name' => $this->name,
-            'created_at' => $this->createdAt
+            'ctime' => $this->ctime
         ];
+    }
+
+    public function getData()
+    {
+        $data = [
+            'id' => $this->id,
+            'name' => $this->name,
+            'created_at' => $this->createdAt,
+            'location' => $this->location->getData()
+        ];
+
+        if($this->user)
+            $data['user'] = $this->user->getData();
+
+        return $data;
     }
 }

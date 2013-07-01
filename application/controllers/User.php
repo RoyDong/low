@@ -57,15 +57,19 @@ class UserController extends BaseController
             throw new Exception(Exception::EMAIL_FORMAT_ERROR);
 
         $userModel = $this->User;
-        $user = $userModel->findOneBy(['email' => $email]);
-        if($user) throw new Exception(Exception::EMAIL_IS_USED);
 
-        $user = new entity\User;
-        $user->email = $email;
-        $user->name = $email;
-        $user->passwd = $passwd;
+        if($userModel->findOneBy(['email' => $email])) 
+            throw new Exception(Exception::EMAIL_IS_USED);
+
+        $user = (new entity\User)
+                ->setEmail($email)
+                ->setName($email)
+                ->setPasswd($passwd)
+                ->setCtime(time());
         $userModel->save($user);
-        if(!$user->id) throw new Exception(Exception::SERVER_ERROR);
+
+        if(!$user->id) 
+            throw new Exception(Exception::SERVER_ERROR);
 
         $this->saveSession($user);
         $this->renderJson([

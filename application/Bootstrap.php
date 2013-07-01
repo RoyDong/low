@@ -39,7 +39,7 @@ class Bootstrap extends Yaf\Bootstrap_Abstract
 
         if(count($keys) === 3)
         {
-            $user = Yaf\Registry::get('model')->get('User')->find($keys[2]);
+            $user = model\Base::getInstance('User')->find($keys[2]);
 
             if($key === $user->getAuthorizedKey($keys[1])
                     && $keys[1] + $duration > time()) return $user;

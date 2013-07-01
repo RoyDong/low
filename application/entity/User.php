@@ -14,6 +14,8 @@ class User extends Base
 
     protected $salt;
 
+    protected $ctime;
+
     public function setId($id)
     {
         $this->id = $id;
@@ -50,6 +52,18 @@ class User extends Base
         return $this;
     }
 
+    public function getCtime()
+    {
+        return $this->ctime;
+    }
+
+    public function setCtime($time)
+    {
+        $this->ctime = $time;
+
+        return $this;
+    }
+
     public function getPasswd()
     {
         return $this->passwd;
@@ -80,12 +94,21 @@ class User extends Base
 
     public function initContent($data)
     {
-        $this->id = $data['id'];
+        $this->id = (int)$data['id'];
         $this->name = $data['name'];
         $this->email = $data['email'];
         $this->passwd = $data['passwd'];
         $this->salt = $data['salt'];
 
         return $this;
+    }
+
+    public function getData()
+    {
+        return [
+            'id' => $this->id,
+            'name' => $this->name,
+            'email' => $this->email,
+        ];
     }
 }

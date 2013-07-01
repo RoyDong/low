@@ -130,14 +130,25 @@ class Location extends Base
 
     public function initContent($data)
     {
-        $this->x = $data['x'];
-        $this->y = $data['y'];
-        $this->mine = $data['mine'];
-        $this->oil = $data['oil'];
-        $this->cid = $data['cid'];
-        $this->type = $data['type'];
-        $this->refreshAt = $data['refresh_at'];
+        $this->x = (int)$data['x'];
+        $this->y = (int)$data['y'];
+        $this->mine = (int)$data['mine'];
+        $this->oil = (int)$data['oil'];
+        $this->cid = (int)$data['cid'];
+        $this->type = (int)$data['type'];
+        $this->refreshAt = (int)$data['refresh_at'];
 
         return $this;
+    }
+
+    public function getData()
+    {
+        return [
+            'x' => $this->x,
+            'y' => $this->y,
+            'mine' => $this->mine,
+            'oil' => $this->oil,
+            'type' => $this->type
+        ];
     }
 }
