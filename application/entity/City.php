@@ -10,11 +10,27 @@ class City extends Base
 
     protected $name = '';
 
+    protected $level = 0;
+
     protected $uid = 0;
 
     protected $user;
 
     protected $location;
+
+    protected $army;
+
+    protected $production = [];
+
+    protected $oilwells = [];
+
+    protected $miners = [];
+
+    protected $camp;
+
+    protected $factory;
+
+    protected $airport;
 
     protected $ctime;
 
@@ -24,7 +40,7 @@ class City extends Base
 
     public function setId($id)
     {
-        $this->id = $id;
+        $this->id = (int)$id;
 
         return $this;
     }
@@ -53,7 +69,7 @@ class City extends Base
 
     public function setUser(User $user)
     {
-        $this->user = $user;
+        $this->user = (int)$user;
 
         return $this;
     }
@@ -70,6 +86,13 @@ class City extends Base
         return $this;
     }
 
+    public function setLevel($level)
+    {
+        $this->level = (int)$level;
+
+        return $this;
+    }
+
     public function getCtime()
     {
         return $this->ctime;
@@ -77,7 +100,7 @@ class City extends Base
 
     public function setCtime($time)
     {
-        $this->ctime= $time;
+        $this->ctime= (int)$time;
 
         return $this;
     }

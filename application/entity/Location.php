@@ -18,7 +18,7 @@ class Location extends Base
 
     protected $type;
 
-    protected $refreshAt;
+    protected $utime;
 
     public function getX()
     {
@@ -27,7 +27,7 @@ class Location extends Base
 
     public function setX($x)
     {
-        $this->x = $x;
+        $this->x = (int)$x;
 
         return $this;
     }
@@ -39,7 +39,7 @@ class Location extends Base
 
     public function setY($y)
     {
-        $this->y = $y;
+        $this->y = (int)$y;
 
         return $this;
     }
@@ -51,7 +51,7 @@ class Location extends Base
 
     public function setMine($mine)
     {
-        $this->mine = $mine;
+        $this->mine = (int)$mine;
 
         return $this;
     }
@@ -63,7 +63,7 @@ class Location extends Base
 
     public function setOil($oil)
     {
-        $this->oil = $oil;
+        $this->oil = (int)$oil;
 
         return $this;
     }
@@ -75,7 +75,7 @@ class Location extends Base
 
     public function setType($type)
     {
-        $this->type = $type;
+        $this->type = (int)$type;
 
         return $this;
     }
@@ -93,26 +93,14 @@ class Location extends Base
         return $this;
     }
 
-    public function getCid()
+    public function getUtime()
     {
-        return $this->cid;
+        return $this->utime;
     }
 
-    public function setCid($cid)
+    public function setUtime($time)
     {
-        $this->cid = $cid;
-
-        return $this;
-    }
-
-    public function getRefreshAt()
-    {
-        return $this->refreshAt;
-    }
-
-    public function setRefreshAt($time)
-    {
-        $this->refreshAt = $time;
+        $this->utime = (int)$time;
 
         return $this;
     }
@@ -136,7 +124,7 @@ class Location extends Base
         $this->oil = (int)$data['oil'];
         $this->cid = (int)$data['cid'];
         $this->type = (int)$data['type'];
-        $this->refreshAt = (int)$data['refresh_at'];
+        $this->utime = (int)$data['utime'];
 
         return $this;
     }

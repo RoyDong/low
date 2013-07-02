@@ -17,6 +17,11 @@ location:
     oil: int
     city: [city, null]
 
+oilwell:
+    id: int
+    level: int
+    ftime: int
+
 city:
     id: int
     name: string
@@ -24,3 +29,16 @@ city:
     location: location
     user: user
 
+    oilwells: [oilwell, ...]
+    miners: [miners, ...]
+    supplies: [supply, ...]
+
+    camp: camp
+    factory: factory
+    airport: airport
+
+    army: []
+    production: []
+
+    
+    

@@ -28,19 +28,16 @@ class MapController extends BaseController
 
         $city = (new entity\City)->setUser($user)
                 ->setName($name)
-                ->setCreatedAt(time());
+                ->setLevel(1)
+                ->setCtime(time());
         $cityModel->save($city);
 
         $location->setCity($city)
                 ->setMine(5000)
                 ->setOil(5000)
-                ->setRefreshAt(time());
+                ->setUtime(time());
         $mapModel->updateNocityLocation($location);
-
-        $center = (new entity\Center(1, 0, $city))->setCreatedAt(time());
-        $center->setHp($center->getHpLimit());
-        $this->Center->insert($center->getDbData(), true);
-
+        $city->setLocation($location);
         $this->renderJson();
     }
 }
