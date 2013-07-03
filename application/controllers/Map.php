@@ -26,18 +26,17 @@ class MapController extends BaseController
         if($cityModel->count('`uid`='.$user->id))
             throw new Exception(Exception::NOT_NEW_PLAYER, 'Not new player');
 
-        $city = (new entity\City)->setUser($user)
+        $time = time();
+        $city = (new entity\City)
+                ->setUser($user)
                 ->setName($name)
                 ->setLevel(1)
-                ->setCtime(time());
-        $cityModel->save($city);
+                ->setCreatedAt($time);
 
-        $location->setCity($city)
-                ->setMine(5000)
-                ->setOil(5000)
-                ->setUtime(time());
-        $mapModel->updateNocityLocation($location);
+        $cityModel->save($city);
         $city->setLocation($location);
-        $this->renderJson();
+        $location->setMine(5000)->setOil(5000)->setUpdatedAt($time);
+        $mapModel->updateNocityLocation($location);
+        $this->renderJson($city->getData());
     }
 }

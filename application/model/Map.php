@@ -52,10 +52,10 @@ class Map extends Base
     public function updateNocityLocation(\entity\Location $location)
     {
         $data = [
-            'cid' => $location->cid,
+            'cid' => $location->getCity()->getId(),
             'mine' => $location->mine,
             'oil' => $location->oil,
-            'refresh_at' => $location->refreshAt
+            'updated_at' => $location->getUpdatedAt()
         ];
         $where = "`x`={$location->x} AND `y`={$location->y}"
                 .' AND `cid`=0 AND `type`='.Map::TYPE_LAND;
@@ -102,7 +102,7 @@ class Map extends Base
                 $data = [
                     'mine' => 0,
                     'oil' => 0,
-                    'refresh_at' => $time
+                    'updated_at' => $time
                 ];
             }
             else
@@ -112,7 +112,7 @@ class Map extends Base
                 $data = [
                     'mine' => mt_rand(Map::MINE_INIT_MIN, Map::MINE_INIT_MAX),
                     'oil' => mt_rand(Map::OIL_INIT_MIN, Map::OIL_INIT_MAX),
-                    'refresh_at' => $time
+                    'updated_at' => $time
                 ];
             }
 

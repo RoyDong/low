@@ -14,7 +14,7 @@ class User extends Base
 
     protected $salt;
 
-    protected $ctime;
+    protected $createdAt;
 
     public function setId($id)
     {
@@ -52,14 +52,14 @@ class User extends Base
         return $this;
     }
 
-    public function getCtime()
+    public function getCreatedAt()
     {
-        return $this->ctime;
+        return $this->createdAt;
     }
 
-    public function setCtime($time)
+    public function setCreatedAt($time)
     {
-        $this->ctime = $time;
+        $this->createdAt = $time;
 
         return $this;
     }
@@ -99,6 +99,7 @@ class User extends Base
         $this->email = $data['email'];
         $this->passwd = $data['passwd'];
         $this->salt = $data['salt'];
+        $this->createdAt = (int)$data['created_at'];
 
         return $this;
     }
@@ -108,7 +109,7 @@ class User extends Base
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'email' => $this->email,
+            'email' => $this->email
         ];
     }
 }

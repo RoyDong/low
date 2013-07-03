@@ -36,10 +36,11 @@ class User extends Base
     public function save(\entity\User $user)
     {
         $data = [
-            'name' => $user->name,
-            'email' => $user->email,
-            'passwd' => $user->passwd,
-            'salt' => $user->salt
+            'name' => $user->getName(),
+            'email' => $user->getEmail(),
+            'passwd' => $user->getPasswd(),
+            'salt' => $user->getSalt(),
+            'created_at' => $user->getCreatedAt(),
         ];
 
         if($user->id)

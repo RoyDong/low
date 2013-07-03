@@ -38,42 +38,40 @@ class City extends Base
 
     public function load($id, \entity\User $user)
     {
+        $city = $this->getEntity($id);
+        if($city) return $city;
+
         $sql = <<<SQL
-select c.name, c.ctime, l.x, l.y, l.mine, l.oil, l.type, l.utime
+select c.name, c.created_at, c.level, c.finish_at, c.finish_level, 
+    l.x, l.y, l.mine, l.oil, l.type, l.updated_at
 from city c inner join location l on l.cid = c.id
-where c.id = $id and c.uid = {$user->id} limit 0,1
+where c.`id` = $id and c.uid = {$user->id} limit 0,1
 SQL;
         $result = Base::getPdo()->query($sql)->fetch(\PDO::FETCH_ASSOC);
 
         if(!$result) return null;
 
-        $location = (new \entity\Location)->setX($result['x'])
+        $location = (new \entity\Location)
+                ->setX($result['x'])
                 ->setY($result['y'])
-                ->setCid($id)
                 ->setMine($result['mine'])
                 ->setOil($result['oil'])
-                ->setUtime($result['utime'])
+                ->setUpdatedAt($result['updated_at'])
                 ->setType($result['type']);
 
-        $city = (new \entity\City)->setId($id)
-                ->setLocation($location)
+        $city = (new \entity\City)
+                ->setId($id)
                 ->setName($result['name'])
-                ->setCtime($result['ctime'])
+                ->setLevel($result['level'])
+                ->setCreatedAt($result['created_at'])
+                ->setFinishAt($result['finish_at'])
+                ->setFinishLevel($result['finish_level'])
+                ->setLocation($location)
                 ->setUser($user);
 
-        $result = Base::getPdo()
-                ->query('select * from structure where cid = '.$id)
-                ->fetchAll(\PDO::FETCH_ASSOC);
-
-        foreach($result as $data)
-            $city->loadStructure($data);
-
-        $result = Base::getPdo()
-                ->query('select * from army where cid = '.$id)
-                ->fetchAll(\PDO::FETCH_ASSOC);
-
-        foreach($result as $data)
-            $city->loadArmy($data);
+        Base::getInstance('Structure')->loadFor($city);
+        //Base::getInstance('Army')->loadFor($city);
+        $this->setEntity($id, $city);
 
         return $city;
     }

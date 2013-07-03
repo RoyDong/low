@@ -2,27 +2,27 @@
 
 namespace entity;
 
-use core\Struct;
 
-class Miner extends Struct
+class Miner extends Structure
 {
     protected $productivity;
 
-    protected $speed = 10;
-
-    public function __construct($base, $level, $hp)
+    public function __construct($data, City $city)
     {
-        $this->base = $base;
-        $this->level = $level;
-        $this->setHp($hp);
+        $this->id = (int)$data['id'];
+        $this->city = $city;
+        $this->createdAt = (int)$data['created_at'];
+        $this->level = (int)$data['level'];
+        $this->finishAt = 0;
     }
 
-    public function fire($target) 
+    public function getUpgradeTime()
     {
-        throw new \core\Exception(1, 'no weapon');
+        
     }
 
-    public function destroy() {
-        ;
+    public function getProduction($time = 3600)
+    {
+
     }
 }

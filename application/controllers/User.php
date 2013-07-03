@@ -65,7 +65,7 @@ class UserController extends BaseController
                 ->setEmail($email)
                 ->setName($email)
                 ->setPasswd($passwd)
-                ->setCtime(time());
+                ->setCreatedAt(time());
         $userModel->save($user);
 
         if(!$user->id) 

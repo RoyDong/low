@@ -18,7 +18,7 @@ class Location extends Base
 
     protected $type;
 
-    protected $utime;
+    protected $updatedAt;
 
     public function getX()
     {
@@ -93,14 +93,14 @@ class Location extends Base
         return $this;
     }
 
-    public function getUtime()
+    public function getUpdatedAt()
     {
-        return $this->utime;
+        return $this->updatedAt;
     }
 
-    public function setUtime($time)
+    public function setUpdatedAt($time)
     {
-        $this->utime = (int)$time;
+        $this->updatedAt = (int)$time;
 
         return $this;
     }
@@ -124,7 +124,7 @@ class Location extends Base
         $this->oil = (int)$data['oil'];
         $this->cid = (int)$data['cid'];
         $this->type = (int)$data['type'];
-        $this->utime = (int)$data['utime'];
+        $this->updatedAt = (int)$data['updated_at'];
 
         return $this;
     }

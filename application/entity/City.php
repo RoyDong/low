@@ -2,7 +2,7 @@
 
 namespace entity;
 
-use core\Exception;
+use model\Structure as StructModel;
 
 class City extends Base
 {
@@ -26,17 +26,23 @@ class City extends Base
 
     protected $miners = [];
 
+    protected $storages = [];
+
+    protected $tanks = [];
+
     protected $camp;
 
     protected $factory;
 
     protected $airport;
 
-    protected $ctime;
+    protected $createdAt;
 
-    public function loadStructure($data)
-    {
-    }
+    protected $finishAt;
+
+    protected $finishLevel;
+
+    protected $constructingLineCount = 0;
 
     public function setId($id)
     {
@@ -58,6 +64,7 @@ class City extends Base
     public function setLocation(Location $location)
     {
         $this->location = $location;
+        $location->setCity($this);
 
         return $this;
     }
@@ -69,7 +76,7 @@ class City extends Base
 
     public function setUser(User $user)
     {
-        $this->user = (int)$user;
+        $this->user = $user;
 
         return $this;
     }
@@ -93,14 +100,38 @@ class City extends Base
         return $this;
     }
 
-    public function getCtime()
+    public function getCreatedAt()
     {
-        return $this->ctime;
+        return $this->createdAt;
     }
 
-    public function setCtime($time)
+    public function setCreatedAt($time)
     {
-        $this->ctime= (int)$time;
+        $this->createdAt= (int)$time;
+
+        return $this;
+    }
+
+    public function setFinishAt($time)
+    {
+        $this->finishAt = (int)$time;
+
+        return $this;
+    }
+
+    public function getFinishAt()
+    {
+        return $this->finishAt;
+    }
+
+    public function getFinishLevel()
+    {
+        return $this->finishLevel;
+    }
+
+    public function setFinishLevel($level)
+    {
+        $this->finishLevel = (int)$level;
 
         return $this;
     }
@@ -110,7 +141,9 @@ class City extends Base
         $this->id = (int)$data['id'];
         $this->uid = (int)$data['uid'];
         $this->name = $data['name'];
-        $this->ctime = (int)$data['ctime'];
+        $this->createdAt = (int)$data['created_at'];
+        $this->finishAt = (int)$data['finish_at'];
+        $this->finishLevel = (int)$data['finish_level'];
 
         return $this;
     }
@@ -120,7 +153,9 @@ class City extends Base
         return [
             'uid' => $this->uid,
             'name' => $this->name,
-            'ctime' => $this->ctime
+            'created_at' => $this->createdAt,
+            'finish_at' => $this->finishAt,
+            'finish_level' => $this->finishLevel
         ];
     }
 
@@ -129,7 +164,10 @@ class City extends Base
         $data = [
             'id' => $this->id,
             'name' => $this->name,
+            'level' => $this->level,
             'created_at' => $this->createdAt,
+            'finish_at' => $this->finishAt,
+            'finish_level' => $this->finishLevel,
             'location' => $this->location->getData()
         ];
 
@@ -137,5 +175,23 @@ class City extends Base
             $data['user'] = $this->user->getData();
 
         return $data;
+    }
+
+    public function getMaxConstructLineCount()
+    {
+        return (int)($this->level / 5) + 1;
+    }
+
+    public function getConstructingLineCount()
+    {
+        return $this->constructingLineCount;
+    }
+
+    public function canConstruct($type)
+    {
+        switch ($type)
+        {
+            case StructModel::TYPE_MINER:
+        }
     }
 }

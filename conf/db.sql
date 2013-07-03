@@ -39,6 +39,8 @@ CREATE TABLE `city` (
   `uid` int(11) NOT NULL DEFAULT 0,
   `level` int(11) NOT NULL DEFAULT 0,
   `created_at` int(11) NOT NULL DEFAULT 0,
+  `finish_at` int(11) NOT NULL DEFAULT 0,
+  `finish_level` int(11) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
@@ -47,7 +49,6 @@ DROP TABLE IF EXISTS `structure`;
 CREATE TABLE `structure` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `cid` int(11) NOT NULL,
-  `hp` int(11) NOT NULL DEFAULT 0,
   `type` smallint(2) UNSIGNED NOT NULL,
   `level` int(11) NOT NULL DEFAULT 0,
   `created_at` int(11) NOT NULL DEFAULT 0,

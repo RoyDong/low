@@ -41,7 +41,7 @@ class Bootstrap extends Yaf\Bootstrap_Abstract
         {
             $user = model\Base::getInstance('User')->find($keys[2]);
 
-            if($key === $user->getAuthorizedKey($keys[1])
+            if($user && $key === $user->getAuthorizedKey($keys[1])
                     && $keys[1] + $duration > time()) return $user;
         }
 
