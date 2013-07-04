@@ -42,8 +42,8 @@ class City extends Base
         if($city) return $city;
 
         $sql = <<<SQL
-select c.name, c.created_at, c.level, c.finish_at, c.finish_level, 
-    l.x, l.y, l.mine, l.oil, l.type, l.updated_at
+select c.name, c.created_at, c.level, c.finish_at, c.mine cm, c.oil co, 
+    c.updated_at cu, l.x, l.y, l.mine, l.oil, l.type, l.updated_at
 from city c inner join location l on l.cid = c.id
 where c.`id` = $id and c.uid = {$user->id} limit 0,1
 SQL;
@@ -62,15 +62,20 @@ SQL;
         $city = (new \entity\City)
                 ->setId($id)
                 ->setName($result['name'])
+                ->setMine($result['cm'])
+                ->setOil($result['co'])
                 ->setLevel($result['level'])
                 ->setCreatedAt($result['created_at'])
                 ->setFinishAt($result['finish_at'])
-                ->setFinishLevel($result['finish_level'])
+                ->setUpdatedAt($result['cu'])
                 ->setLocation($location)
                 ->setUser($user);
 
         Base::getInstance('Structure')->loadFor($city);
         //Base::getInstance('Army')->loadFor($city);
+        $city->updateResource();
+        Base::getInstance('Map')->save($location);
+        $this->save($city);
         $this->setEntity($id, $city);
 
         return $city;

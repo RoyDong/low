@@ -1,6 +1,8 @@
 <?php
 
 use core\Exception;
+use model\Structure;
+
 
 class CityController extends BaseController
 {
@@ -25,17 +27,30 @@ class CityController extends BaseController
 
     public function upgradeAction()
     {
-
+        $this->city->setLevel($this->city->getLevel() + 1);
     }
 
     public function constructAction()
     {
         $type = $this->getRequest()->get('type');
 
-        if($this->city->canConstruct($type))
-        {
+        if(!$this->city->canConstruct($type))
+            throw new Exception(Exception::NO_PERMISSION);
 
+        switch ($type)
+        {
+            case Structure::TYPE_MINER:
+                $miner = new \entity\Miner;
+                $miner->setLevel(0)
+                        ->setCreatedAt(time())
+                        ->setFinishAt(time() + $miner->getUpgradeTime());
+
+                $this->city->setMiner($miner);
+                $this->Structure->save($miner);
+                break;
         }
+
+        $this->renderJson($this->city->getData());
     }
 
     public function showAction()

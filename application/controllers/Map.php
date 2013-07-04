@@ -31,6 +31,7 @@ class MapController extends BaseController
                 ->setUser($user)
                 ->setName($name)
                 ->setLevel(1)
+                ->setUpdatedAt($time)
                 ->setCreatedAt($time);
 
         $cityModel->save($city);
@@ -38,5 +39,26 @@ class MapController extends BaseController
         $location->setMine(5000)->setOil(5000)->setUpdatedAt($time);
         $mapModel->updateNocityLocation($location);
         $this->renderJson($city->getData());
+    }
+
+    public function curveAction()
+    {
+        $data = [];
+        $s = 0;
+
+        for($i = 1; $i < 20; $i++)
+        {
+            $s =   pow($i, 4) + 10;
+            $s1 = 2 * pow($i, 4) + 10;
+
+            $data[] = date('d H:i:s', $s);
+            $data1[] = date('d H:i:s', $s1);
+        }
+
+        echo '<pre>';
+        print_r($data);
+        print_r($data1);
+
+        $this->yafAutoRender = true;
     }
 }

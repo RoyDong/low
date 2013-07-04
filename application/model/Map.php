@@ -42,7 +42,7 @@ class Map extends Base
         return $location;
     }
 
-    public function save(Location $location)
+    public function save(\entity\Location $location)
     {
         $data = $location->getData();
 

@@ -38,7 +38,10 @@ CREATE TABLE `city` (
   `name` varchar(20) NOT NULL,
   `uid` int(11) NOT NULL DEFAULT 0,
   `level` int(11) NOT NULL DEFAULT 0,
+  `mine` int(11) NOT NULL DEFAULT 0,
+  `oil` int(11) NOT NULL DEFAULT 0,
   `created_at` int(11) NOT NULL DEFAULT 0,
+  `updated_at` int(11) NOT NULL DEFAULT 0,
   `finish_at` int(11) NOT NULL DEFAULT 0,
   `finish_level` int(11) NOT NULL,
   PRIMARY KEY (`id`)

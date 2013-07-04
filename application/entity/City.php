@@ -12,10 +12,12 @@ class City extends Base
 
     protected $level = 0;
 
-    protected $uid = 0;
-
     protected $user;
 
+    /**
+     *
+     * @var Location
+     */
     protected $location;
 
     protected $army;
@@ -25,6 +27,10 @@ class City extends Base
     protected $oilwells = [];
 
     protected $miners = [];
+
+    protected $mine;
+
+    protected $oil;
 
     protected $storages = [];
 
@@ -38,11 +44,15 @@ class City extends Base
 
     protected $createdAt;
 
+    protected $updatedAt;
+
     protected $finishAt;
 
     protected $finishLevel;
 
     protected $constructingLineCount = 0;
+
+    protected $minerLimit;
 
     public function setId($id)
     {
@@ -56,6 +66,10 @@ class City extends Base
         return $this->id;
     }
 
+    /**
+     * 
+     * @return Location
+     */
     public function getLocation()
     {
         return $this->location;
@@ -151,9 +165,12 @@ class City extends Base
     public function getDbData()
     {
         return [
-            'uid' => $this->uid,
+            'uid' => $this->user->getId(),
             'name' => $this->name,
+            'mine' => $this->mine,
+            'oil' => $this->oil,
             'created_at' => $this->createdAt,
+            'updated_at' => $this->updatedAt,
             'finish_at' => $this->finishAt,
             'finish_level' => $this->finishLevel
         ];
@@ -164,20 +181,29 @@ class City extends Base
         $data = [
             'id' => $this->id,
             'name' => $this->name,
+            'mine' => $this->mine,
+            'oil' => $this->oil,
             'level' => $this->level,
             'created_at' => $this->createdAt,
             'finish_at' => $this->finishAt,
-            'finish_level' => $this->finishLevel,
             'location' => $this->location->getData()
         ];
 
         if($this->user)
             $data['user'] = $this->user->getData();
 
+        if($this->miners)
+        {
+            foreach($this->miners as $miner)
+                $miners[] = $miner->getData();
+
+            $data['miners'] = $miners;
+        }
+
         return $data;
     }
 
-    public function getMaxConstructLineCount()
+    public function getConstructLineLimit()
     {
         return (int)($this->level / 5) + 1;
     }
@@ -189,9 +215,69 @@ class City extends Base
 
     public function canConstruct($type)
     {
-        switch ($type)
+        if($this->getConstructLineLimit() <= $this->getConstructingLineCount())
+            return false;
+
+        switch($type)
         {
             case StructModel::TYPE_MINER:
+                return count($this->miners) < $this->getMinerLimit();
+               
         }
+    }
+
+    public function getMinerLimit()
+    {
+        return (int)($this->level / 5) + 1;
+    }
+
+    public function setMiner(Miner $miner)
+    {
+        if(empty($this->miners[$miner->getId()]))
+        {
+            $this->miners[$miner->getId()] = $miner;
+            $miner->setCity($this);
+
+            if($miner->isConstructing())
+                $this->constructingLineCount++;
+        }
+    }
+
+    public function setMine($mine)
+    {
+        $this->mine = (int)$mine;
+
+        return $this;
+    }
+
+    public function setOil($oil)
+    {
+        $this->oil = (int)$oil;
+
+        return $this;
+    }
+
+    public function setUpdatedAt($time)
+    {
+        $this->updatedAt = (int)$time;
+
+        return $this;
+    }
+
+    public function updateResource()
+    {
+        $time = time() - $this->updatedAt;
+        $production = 0;
+
+        foreach($this->miners as $miner)
+        {
+            $production += $miner->getProduction($time);
+        }
+
+        $mine = $this->location->getMine();
+        if($mine < $production) $production = $mine;
+        $this->mine += $production;
+        $this->location->setMine($mine - $production);
+        $this->updatedAt = time();
     }
 }
